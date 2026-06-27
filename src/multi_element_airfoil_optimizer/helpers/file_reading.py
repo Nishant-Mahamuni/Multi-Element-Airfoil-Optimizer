@@ -1,13 +1,18 @@
-import numpy as np
+from __future__ import annotations
 
 __all__ = [
-    'read_dat',
+    "read_dat",
 ]
 
-def read_dat(filepath):
+from pathlib import Path
+
+import numpy as np
+
+
+def read_dat(filepath: Path) -> tuple[str, np.ndarray]:
     coords = []
     name = ""
-    with open(filepath, 'r') as f:
+    with open(filepath, "r") as f:
         lines = f.readlines()
     for i, line in enumerate(lines):
         line = line.strip()

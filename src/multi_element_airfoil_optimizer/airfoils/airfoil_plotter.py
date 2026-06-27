@@ -1,3 +1,10 @@
+from __future__ import annotations
+
+__all__ = [
+    "plot_airfoil",
+    "plot_subparser_function",
+]
+
 import sys
 
 import matplotlib.pyplot as plt
@@ -7,22 +14,23 @@ from multi_element_airfoil_optimizer.helpers import read_dat
 
 HERE = Path(__file__).parent
 
-def plot_airfoil(filepath):
+
+def plot_airfoil(filepath: Path):
     name, coords = read_dat(filepath)
     x, y = coords[:, 0], coords[:, 1]
 
     fig, ax = plt.subplots(figsize=(10, 10))
 
-    ax.grid(True, linestyle='--', alpha=0.5)
-    ax.axhline(0, color='k', linewidth=0.5, linestyle='--')
+    ax.grid(True, linestyle="--", alpha=0.5)
+    ax.axhline(0, color="k", linewidth=0.5, linestyle="--")
 
-    ax.plot(x, y, 'b-', linewidth=1.5, label=name or "Airfoil")
-    ax.fill(x, y, alpha=0.1, color='steelblue')
+    ax.plot(x, y, "b-", linewidth=1.5, label=name or "Airfoil")
+    ax.fill(x, y, alpha=0.1, color="steelblue")
 
-    ax.set_aspect('equal')
+    ax.set_aspect("equal")
 
-    ax.set_xlabel("x/c", fontsize=12)
-    ax.set_ylabel("y/c", fontsize=12)
+    ax.set_xlabel("x", fontsize=12)
+    ax.set_ylabel("y", fontsize=12)
 
     ax.set_xlim(-0.1, 1.1)
     ax.set_ylim(-0.6, 0.6)
@@ -31,7 +39,8 @@ def plot_airfoil(filepath):
     plt.tight_layout()
     plt.show()
 
-def handle_plot(args):
+
+def plot_subparser_function(args):
     filename = args.airfoil.strip()
 
     if not filename.endswith(".dat"):
