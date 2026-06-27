@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-multi-element-airfoil-optimizer = "multi_element_airfoil_optimizer:main"
+meaow = "multi_element_airfoil_optimizer.cli:main"
 
 [build-system]
 requires = ["uv_build>=0.11.25,<0.12.0"]
