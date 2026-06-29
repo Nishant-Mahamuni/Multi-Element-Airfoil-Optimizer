@@ -4,32 +4,43 @@ __all__ = [
     "build_mesh",
 ]
 
+import argparse
+from pathlib import Path
+
 import gmsh
 import numpy as np
-from pathlib import Path
+from numpy.typing import NDArray
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 ELEMENTS_DIR = ROOT_DIR / "geometry" / "elements"
 OUTPUT_SU2 = ROOT_DIR / "meshing" / "outputs" / "mesh.su2"
 
 
-def load_airfoil_dat(filepath):
+def load_airfoil_dat(filepath: str | Path) -> tuple[NDArray, NDArray]:
     data = np.loadtxt(filepath, skiprows=1)
     x, y = data[:, 0], data[:, 1]
     return x, y
 
 
-def deduplicate_endpoints(x, y, tol=1e-6):
+def deduplicate_endpoints(
+    x: NDArray,
+    y: NDArray,
+    tol: float = 1e-6,
+) -> tuple[NDArray, NDArray]:
     if np.hypot(x[-1] - x[0], y[-1] - y[0]) < tol:
         return x[:-1], y[:-1]
     return x, y
 
 
-def create_airfoil_geometry(x_coords, y_coords, mesh_size=0.01):
+def create_airfoil_geometry(
+    x_coords: NDArray,
+    y_coords: NDArray,
+    mesh_size: float = 0.01,
+) -> tuple[int, list[int]]:
     x_coords, y_coords = deduplicate_endpoints(x_coords, y_coords)
     points = [
         gmsh.model.geo.addPoint(x, y, 0, mesh_size)
-        for x, y in zip(x_coords, y_coords)
+        for x, y in zip(x_coords, y_coords, strict=False)
     ]
     lines = [
         gmsh.model.geo.addLine(points[i], points[(i + 1) % len(points)])
@@ -38,7 +49,7 @@ def create_airfoil_geometry(x_coords, y_coords, mesh_size=0.01):
     return gmsh.model.geo.addCurveLoop(lines), lines
 
 
-def build_mesh(args):
+def build_mesh(args: argparse.Namespace) -> None:
     gmsh.initialize()
 
     gmsh.option.setNumber("Geometry.Tolerance", 1e-9)
@@ -70,7 +81,7 @@ def build_mesh(args):
         all_airfoil_lines.extend(lines)
 
     fluid_surface = gmsh.model.geo.addPlaneSurface(
-        [farfield_loop] + all_airfoil_loops
+        [farfield_loop, *all_airfoil_loops],
     )
 
     gmsh.model.geo.synchronize()
@@ -92,6 +103,6 @@ def build_mesh(args):
     OUTPUT_SU2.parent.mkdir(parents=True, exist_ok=True)
     gmsh.write(str(OUTPUT_SU2))
 
-    OUTPUT_MSH = OUTPUT_SU2.with_suffix(".msh")
-    gmsh.write(str(OUTPUT_MSH))
+    output_msh = OUTPUT_SU2.with_suffix(".msh")
+    gmsh.write(str(output_msh))
     gmsh.finalize()

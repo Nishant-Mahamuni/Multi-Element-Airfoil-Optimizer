@@ -1,14 +1,16 @@
+from __future__ import annotations
+
 import argparse
 import sys
 
 from multi_element_airfoil_optimizer.airfoils import plot_subparser_function
 from multi_element_airfoil_optimizer.meshing import (
-    mesh_plot_subparser_function,
     build_mesh,
+    mesh_plot_subparser_function,
 )
 
 
-def setup_plot_parser(subparsers):
+def setup_plot_parser(subparsers: argparse._SubParsersAction) -> None:
     plot_parser = subparsers.add_parser("plot", help="Plot an airfoil")
     plot_parser.add_argument(
         "-a",
@@ -18,17 +20,17 @@ def setup_plot_parser(subparsers):
         help="Name of the airfoil file to plot (e.g., NACA0009.dat)",
     )
     plot_parser.set_defaults(func=plot_subparser_function)
-    
-    
-def setup_mesh_plot_parser(subparsers):
+
+
+def setup_mesh_plot_parser(subparsers: argparse._SubParsersAction) -> None:
     mesh_plot_parser = subparsers.add_parser(
         "mesh-viz",
         help="Visualise the mesh",
     )
     mesh_plot_parser.set_defaults(func=mesh_plot_subparser_function)
-    
-    
-def setup_meshing_parser(subparsers):
+
+
+def setup_meshing_parser(subparsers: argparse._SubParsersAction) -> None:
     mesh_plot_parser = subparsers.add_parser(
         "mesh-init",
         help="Generate an Initial mesh",
@@ -36,11 +38,14 @@ def setup_meshing_parser(subparsers):
     mesh_plot_parser.set_defaults(func=build_mesh)
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(
-        description="MEAOW: Multi-Element Airfoil Optimizer"
+        description="MEAOW: Multi-Element Airfoil Optimizer",
     )
-    subparsers = parser.add_subparsers(dest="command", help="Available commands")
+    subparsers = parser.add_subparsers(
+        dest="command",
+        help="Available commands",
+    )
 
     setup_plot_parser(subparsers)
     setup_mesh_plot_parser(subparsers)

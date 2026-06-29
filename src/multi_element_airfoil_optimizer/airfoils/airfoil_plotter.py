@@ -5,23 +5,23 @@ __all__ = [
     "plot_subparser_function",
 ]
 
+import argparse
 import sys
-
-import matplotlib.pyplot as plt
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 from multi_element_airfoil_optimizer.helpers import read_dat
 
 HERE = Path(__file__).parent
 
 
-def plot_airfoil(filepath: Path):
+def plot_airfoil(filepath: Path) -> None:
     name, coords = read_dat(filepath)
     x, y = coords[:, 0], coords[:, 1]
 
-    fig, ax = plt.subplots(figsize=(10, 10))
+    _fig, ax = plt.subplots(figsize=(10, 10))
 
-    ax.grid(True, linestyle="--", alpha=0.5)
+    ax.grid(visible=True, linestyle="--", alpha=0.5)
     ax.axhline(0, color="k", linewidth=0.5, linestyle="--")
 
     ax.plot(x, y, "b-", linewidth=1.5, label=name or "Airfoil")
@@ -40,7 +40,7 @@ def plot_airfoil(filepath: Path):
     plt.show()
 
 
-def plot_subparser_function(args):
+def plot_subparser_function(args: argparse.Namespace) -> None:
     filename = args.airfoil.strip()
 
     if not filename.endswith(".dat"):
@@ -49,8 +49,6 @@ def plot_subparser_function(args):
     filepath = HERE / "airfoil_files" / filename
 
     if not filepath.exists():
-        print(f"Error: File not found at {filepath}")
         sys.exit(1)
     else:
-        print(f"Plotting {filename}...")
         plot_airfoil(filepath)

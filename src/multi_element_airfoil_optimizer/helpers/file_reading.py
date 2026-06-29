@@ -12,7 +12,7 @@ import numpy as np
 def read_dat(filepath: Path) -> tuple[str, np.ndarray]:
     coords = []
     name = ""
-    with open(filepath, "r") as f:
+    with open(filepath) as f:
         lines = f.readlines()
     for i, line in enumerate(lines):
         line = line.strip()

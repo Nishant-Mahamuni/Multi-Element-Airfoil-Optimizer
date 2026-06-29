@@ -24,5 +24,77 @@ meaow = "multi_element_airfoil_optimizer.cli:main"
 requires = ["uv_build>=0.11.25,<0.12.0"]
 build-backend = "uv_build"
 
+[tool.ruff]
+line-length = 80
+preview = true
+
 [tool.ruff.lint]
-ignore = ["F403"]
+select = [
+    "F",  # pyflakes
+    "E",  # pycodestyle ERROR
+    "W",  # pycodestyle WARNING
+    "N",  # pep8-naming
+    "UP",  # pyupgrade
+    "YTT",  # sys.version checking
+    "ANN",  # type annotations
+    "ASYNC",  # asyncio
+    "S",  # bandit - security checks
+    "FBT",  # boolean trap
+    "B",  # bugbear - common bugs and anti-patterns
+    "A",  # builtins
+    "COM",  # commas
+    "C4",  # comprehensions
+    "T10",  # no debugger usage / breakpoint() calls
+    "T20",  # no print calls
+    "FA",  # future annotations
+    "ISC",  # implicit string concatenation
+    "ICN",  # import naming conventions
+    "LOG",  # logging
+    "G",  # logging format
+    "INP",  # no pep420 implicit namespaces
+    "PIE",  # misc checks - unnecessary dict kwargs, extra implicit args, ...
+    "PT",  # pytest style
+    "RET",  # return rules
+    "SIM",  # simplify
+    "INT",  # gettext
+    "TRY",  # tryceratops - exception handling anti-patterns
+    "FLY",  # misc string formatting
+    "I",  # isort (import sorting)
+    "NPY",  # numpy
+    "PERF",  # performance/micro-optimizations
+    "FURB",  # refurbishing/modernization
+    "RUF",  # general ruff specific rules
+]
+ignore = [
+    "F403",
+    "E741",
+    "N818",
+    "A005",
+    "ANN401",
+    "B901",
+    "B008",
+    "SIM105",
+    "SIM300",
+    "TRY002",
+    "TRY003",
+    "PERF203",
+    "RUF021",
+    "RUF022",
+    "RUF023",
+    "RUF052",
+    "RUF067",
+    "missing-return-type-private-function",
+]
+
+[tool.ruff.lint.isort]
+case-sensitive = true
+combine-as-imports = true
+forced-separate = ["tests"]
+order-by-type = true
+required-imports = ["from __future__ import annotations"]
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "local-folder",
+]
