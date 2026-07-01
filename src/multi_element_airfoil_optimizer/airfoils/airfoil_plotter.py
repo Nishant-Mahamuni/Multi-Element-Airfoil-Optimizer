@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+
 from multi_element_airfoil_optimizer.helpers import read_dat
 
 HERE = Path(__file__).parent

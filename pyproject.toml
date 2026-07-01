@@ -45,7 +45,6 @@ select = [
     "COM",  # commas
     "C4",  # comprehensions
     "T10",  # no debugger usage / breakpoint() calls
-    "T20",  # no print calls
     "FA",  # future annotations
     "ISC",  # implicit string concatenation
     "ICN",  # import naming conventions
@@ -84,6 +83,10 @@ ignore = [
     "RUF052",
     "RUF067",
     "missing-return-type-private-function",
+    "S404",
+    "subprocess-popen-with-shell-equals-true",
+    "start-process-with-partial-path",
+    "subprocess-without-shell-equals-true",
 ]
 
 [tool.ruff.lint.isort]
@@ -96,5 +99,9 @@ section-order = [
     "future",
     "standard-library",
     "third-party",
+    "meaow",
     "local-folder",
 ]
+
+[tool.ruff.lint.isort.sections]
+meaow = ["multi_element_airfoil_optimizer"]

@@ -5,13 +5,13 @@ __all__ = [
 ]
 
 import argparse
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 import meshio
 from matplotlib.collections import LineCollection
 
-ROOT_DIR = Path(__file__).resolve().parents[1]
+from multi_element_airfoil_optimizer import ROOT_DIR
+
 OUTPUT_MSH = ROOT_DIR / "meshing" / "outputs" / "mesh.msh"
 
 

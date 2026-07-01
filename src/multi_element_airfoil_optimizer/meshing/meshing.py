@@ -11,7 +11,8 @@ import gmsh
 import numpy as np
 from numpy.typing import NDArray
 
-ROOT_DIR = Path(__file__).resolve().parents[1]
+from multi_element_airfoil_optimizer import ROOT_DIR
+
 ELEMENTS_DIR = ROOT_DIR / "geometry" / "elements"
 OUTPUT_SU2 = ROOT_DIR / "meshing" / "outputs" / "mesh.su2"
 
