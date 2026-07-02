@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 __all__ = [
-    "su2_rans_direct_run",
-    "su2_rans_direct_run_subparser_function",
+    "su2_inc_rans_run",
+    "su2_inc_rans_run_subparser_function",
 ]
 
 import argparse
+import re
 import shutil
 import subprocess
 import sys
@@ -14,7 +15,7 @@ from pathlib import Path
 
 from multi_element_airfoil_optimizer import ROOT_DIR
 
-TEMPLATE = Path(__file__).parent / "rans_direct_config.cfg"
+TEMPLATE = Path(__file__).parent / "inc_rans_config.cfg"
 MESH = ROOT_DIR / "meshing" / "outputs" / "mesh.su2"
 OUTPUT_DIR = Path(__file__).parent / "outputs"
 
@@ -27,7 +28,7 @@ _SU2_OUTPUTS = [
 ]
 
 
-def su2_rans_direct_run(args: argparse.Namespace) -> None:
+def su2_inc_rans_run(args: argparse.Namespace) -> None:
     if not TEMPLATE.exists():
         raise FileNotFoundError(f"Config template not found: {TEMPLATE}")
     if not MESH.exists():
@@ -41,7 +42,16 @@ def su2_rans_direct_run(args: argparse.Namespace) -> None:
     with tempfile.TemporaryDirectory(prefix="su2_run_") as tmp_str:
         tmp = Path(tmp_str)
         cfg_path = tmp / "su2_run.cfg"
-        cfg_path.write_text(TEMPLATE.read_text())
+        local_mesh_path = tmp / "mesh.su2"
+        shutil.copy2(MESH, local_mesh_path)
+        cfg_text = TEMPLATE.read_text()
+
+        cfg_text = re.sub(r"^\s*MESH_FILENAME\s*=.*$", "", cfg_text,
+                          flags=re.MULTILINE)
+
+        cfg_text += "\nMESH_FILENAME= mesh.su2\n"
+
+        cfg_path.write_text(cfg_text)
 
         print(
             f"[su2-run] Template : {TEMPLATE}\n"
@@ -77,9 +87,9 @@ def su2_rans_direct_run(args: argparse.Namespace) -> None:
     print(f"[su2-run] Done. Results in {OUTPUT_DIR}")
 
 
-def su2_rans_direct_run_subparser_function(args: argparse.Namespace) -> None:
+def su2_inc_rans_run_subparser_function(args: argparse.Namespace) -> None:
     try:
-        su2_rans_direct_run(args)
+        su2_inc_rans_run(args)
     except (FileNotFoundError, RuntimeError) as exc:
         print(f"[su2-run] Error: {exc}", file=sys.stderr)
         sys.exit(1)
