@@ -9,6 +9,7 @@ from multi_element_airfoil_optimizer.meshing import (
     mesh_plot_subparser_function,
 )
 from multi_element_airfoil_optimizer.solver import (
+    flow_viz_subparser_function,
     su2_inc_rans_run_subparser_function,
 )
 
@@ -51,6 +52,28 @@ def setup_su2_inc_rans_parser(
     su2_inc_rans.set_defaults(func=su2_inc_rans_run_subparser_function)
 
 
+def setup_flow_plot_parser(subparsers: argparse._SubParsersAction) -> None:
+    flow_plot_parser = subparsers.add_parser(
+        "flow-viz",
+        help="Visualise the flow solution.",
+    )
+    flow_plot_parser.add_argument(
+        "-s",
+        "--solver",
+        type=str,
+        required=True,
+        help="Choose the solver and parameter.",
+    )
+    flow_plot_parser.add_argument(
+        "-f",
+        "--feature",
+        type=str,
+        required=True,
+        help="Choose the parameter.",
+    )
+    flow_plot_parser.set_defaults(func=flow_viz_subparser_function)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="MEAOW: Multi-Element Airfoil Optimizer",
@@ -64,6 +87,7 @@ def main() -> None:
     setup_mesh_plot_parser(subparsers)
     setup_meshing_parser(subparsers)
     setup_su2_inc_rans_parser(subparsers)
+    setup_flow_plot_parser(subparsers)
 
     args = parser.parse_args()
     if hasattr(args, "func"):

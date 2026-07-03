@@ -13,6 +13,7 @@ dependencies = [
     "meshio>=5.3.5",
     "numpy>=2.5.0",
     "pandas>=3.0.3",
+    "pyvista>=0.48.4",
     "ruff>=0.15.20",
     "scipy>=1.18.0",
 ]
